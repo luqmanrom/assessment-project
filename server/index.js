@@ -48,6 +48,18 @@ router.get('/shops', function(req, res) {
     })
 })
 
+router.get('/flush', function(req,res) {
+    Shop.remove({}, function(err,obj) {
+        if (err) {
+            // Handle err
+        } else {
+            console.log('FLushed');
+            res.statusCode = 200;
+            res.end();
+        }
+    })
+})
+
 // POST new shop
 router.post('/shop', function(req, res) {
     console.log(req.body.name);
@@ -111,9 +123,9 @@ router.patch('/shop/:id', function(req, res) {
     })
 })
 
-router.post('/shop/sync', function(req, res) {
+router.post('/shop/sync/', function(req, res) {
     // We assume it is not allowed to have two shops with the same name
-    console.log('Request received');
+    // console.log('Request received with flush= ' + req.params.flush);
     var newShop = {
         name: req.body.name,
         floor: req.body.floor,
@@ -145,6 +157,7 @@ router.post('/shop/sync', function(req, res) {
 
 
     })
+
 
 })
 

@@ -24,8 +24,9 @@ angular.module('falconCodeChallengeApp')
 
         vm.import = function(shops) {
             delete shops['filename'];
+            console.log($scope.csv.flush);
             console.log(shops);
-            FetchDataService.sync(shops);
+            FetchDataService.sync(shops,$scope.csv.flush);
         }
 
         vm.getshops = function() {

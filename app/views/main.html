@@ -34,13 +34,14 @@
     <div class="col-lg-12">
         <div class="pull-right">
             <button class="btn btn-primary" ng-csv="$root.shops" filename="shopDirectory.csv" csv-header="['id','name','floor','unit','v']"> Export </button>
+            <div>
+                <ng-csv-import class="import" content="csv.content" header="csv.header" header-visible="csv.headerVisible" separator="csv.separator" separator-visible="csv.separatorVisible" result="csv.result" encoding="csv.encoding" encoding-visible="csv.encodingVisible">
+                </ng-csv-import>
+                <label for="flush"> Flush? </label>
+                <input type="checkbox" name="flush" ng-model="csv.flush" /> <br/>
+                <button ng-click="main.import(csv.result)" class="btn btn-primary"> Import </button>
 
-<!--             <button ng-click="main.convert(csv.result)"> Convert</button> -->
-            <button ng-click="main.import(csv.result)" class="btn btn-primary"> Import </button>
-            <ng-csv-import class="import" content="csv.content" header="csv.header" header-visible="csv.headerVisible" separator="csv.separator" separator-visible="csv.separatorVisible" result="csv.result" encoding="csv.encoding" encoding-visible="csv.encodingVisible">
-
-            </ng-csv-import>
-
+            </div>
         </div>
     </div>
 </div>

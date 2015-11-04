@@ -3,6 +3,31 @@ angular.module('falconCodeChallengeApp')
         // return $resource('http://localhost:8000/v1/shops');
 
         var func = {};
+
+        var flushServer = function() {
+            var promise = $http({
+                method: 'GET',
+                url: 'http://localhost:9000/v1/flush',
+            }).then(function successCallback(response) {
+                return response.data;
+            });
+
+            return promise;
+        };
+
+
+        var updateLocalData = function(newShop) {
+        	var index = lodash.findIndex($rootScope.shops, function(oldShop) {
+        		return oldShop.name == newShop.name;
+        	})
+
+        	if (index > 0) {
+        		$rootScope.shops[index] = newShop;
+        	} else {
+        		$rootScope.shops.push(newShop);
+        	}
+        }
+
         func.getShop = function() {
             var promise = $http({
                 method: 'GET',
@@ -78,25 +103,45 @@ angular.module('falconCodeChallengeApp')
             });
 
             return promise;
-
         }
 
 
-        func.sync = function(shops) {
-        	// Send each data to the server and pass callback to update the rootScope
+        func.sync = function(shops, flush) {
+            // Send each data to the server and pass callback to update the rootScope
+            if (flush == true) {
+                // Ask server to flush
+                console.log('Flush == true');
+                flushServer().then(function(d) {
+                	$rootScope.shops = [];
+                    shops.forEach(function(element) {
+                        $http({
+                            method: 'POST',
+                            url: 'http://localhost:9000/v1/shop/sync',
+                            data: element
+                        }).then(function successCallback(response) {
+                        	console.log(response.data);
 
-        	shops.forEach(function(element) {
-        		console.log(element);
-        		$http({
-        			method: 'POST',
-        			url: 'http://localhost:9000/v1/shop/sync',
-        			data: element
-        		}).then(function successCallback(response) {
-        			// Update rootScope with response.data
-        			//console.log(response.data);
-        		})
-        	})
+                        	updateLocalData(response.data);
+                            // Update rootScope with response.data
+                            //console.log(response.data);
+                        })
+                    })
+                })
+            } else {
+                shops.forEach(function(element) {
+                    console.log(element);
+                    $http({
+                        method: 'POST',
+                        url: 'http://localhost:9000/v1/shop/sync',
+                        data: element
+                    }).then(function successCallback(response) {
+                    	updateLocalData(response.data)
+                        // Update rootScope with response.data
+                        //console.log(response.data);
+                    })
+                })
 
+            }
 
         };
 
