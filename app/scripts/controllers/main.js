@@ -26,9 +26,9 @@ angular.module('falconCodeChallengeApp')
 
         vm.trim = function(arr) {
         	arr.forEach(function(el) {
-        		delete el['__v'];
-        		delete el['_id']
-        	})
+        		delete el.__v;
+        		delete el._id;
+        	});
 
         	return arr;
         };
@@ -38,30 +38,21 @@ angular.module('falconCodeChallengeApp')
             console.log($scope.csv.flush);
             console.log(shops);
             FetchDataService.sync(shops,$scope.csv.flush);
-        }
+        };
 
         vm.getshops = function() {
             FetchDataService.getShop().then(function(d) {
                 vm.shops = d;
-                // console.log(d);
-            })
+            });
         };
-
-        vm.editShop = function(shop) {
-            // FetchDataService.editShop();
-        }
 
         vm.removeShop = function(id) {
             FetchDataService.deleteShop(id).then(function(d) {
                 console.log(d);
-            })
+            });
         };
 
-        // vm.addShop({
-        //     name: 'Jusco',
-        //     floor: 'LG',
-        //     lot: '28-C'
-        // })
+    
 
         vm.modalAddShop = function() {
             var modalInstance = $uibModal.open({
@@ -71,10 +62,10 @@ angular.module('falconCodeChallengeApp')
 
             });
 
-            modalInstance.result.then(function(selectedItem) {}, function() {
+            modalInstance.result.then(function() {}, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
-        }
+        };
 
         vm.modalEditShop = function(index) {
             var modalInstance = $uibModal.open({
@@ -87,16 +78,10 @@ angular.module('falconCodeChallengeApp')
                 }
             });
 
-            modalInstance.result.then(function(selectedItem) {}, function() {
+            modalInstance.result.then(function() {}, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
         };
-
-
-        vm.submit = function(element) {
-            console.log(element.files)
-
-        }
 
     });
 
@@ -114,8 +99,8 @@ angular.module('falconCodeChallengeApp')
             console.log($scope.editShop);
             FetchDataService.editShop($scope.editShop).then(function() {
                 ok();
-            })
-        }
+            });
+        };
     });
 
 
@@ -127,10 +112,10 @@ angular.module('falconCodeChallengeApp')
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.addShop = function(shop) {
+        $scope.addShop = function() {
             FetchDataService.addShop($scope.newShop).then(function() {
                 ok();
-            })
+            });
         };
 
 

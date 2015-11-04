@@ -1,6 +1,7 @@
+'use strict';
+
 angular.module('falconCodeChallengeApp')
     .factory('FetchDataService', function($http, $rootScope, lodash, $timeout) {
-        // return $resource('http://localhost:8000/v1/shops');
         var url = 'http://localhost:9000/v1/'
         var func = {};
 
@@ -41,7 +42,6 @@ angular.module('falconCodeChallengeApp')
             return promise;
         };
 
-        // UNTESTED
         // PATCH
         func.editShop = function(shop) {
             var promise = $http({
@@ -120,10 +120,7 @@ angular.module('falconCodeChallengeApp')
                             data: element
                         }).then(function successCallback(response) {
                         	console.log(response.data);
-
                         	updateLocalData(response.data);
-                            // Update rootScope with response.data
-                            //console.log(response.data);
                         })
                     })
                 })
@@ -136,8 +133,6 @@ angular.module('falconCodeChallengeApp')
                         data: element
                     }).then(function successCallback(response) {
                     	updateLocalData(response.data)
-                        // Update rootScope with response.data
-                        //console.log(response.data);
                     })
                 })
 

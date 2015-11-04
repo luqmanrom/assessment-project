@@ -8,17 +8,17 @@ var db = require('./mongoose.js');
 var port = process.env.port || 9000;
 
 
+/***********************  Middleware  *********************/
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-
+app.use(bodyParser.urlencoded({extended: true }));
 app.use('/v1', router);
 
+/*********************************************************/
 
 
+// Check the validity of the id for all request
 router.param('id', function(req, res, next, id) {
     try {
         db.checkValidity(id);
@@ -40,6 +40,7 @@ router.get('/shops', function(req, res) {
     })
 })
 
+// Flush the data
 router.get('/flush', function(req,res) {
     db.Shop.remove({}, function(err,obj) {
         if (err) {
@@ -114,6 +115,7 @@ router.patch('/shop/:id', function(req, res) {
     })
 })
 
+// Sync the data for importing
 router.post('/shop/sync/', function(req, res) {
     // We assume it is not allowed to have two shops with the same name
     // console.log('Request received with flush= ' + req.params.flush);

@@ -23,7 +23,7 @@ angular
        FetchDataService.getShop().then(function(d) {
                 $rootScope.shops = d;
                 console.log(d);
-            })
+            });
   })
   .config(function ($routeProvider) {
     $routeProvider
