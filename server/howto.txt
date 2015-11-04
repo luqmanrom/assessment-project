@@ -1,0 +1,9 @@
+# Run MongoDB
+sudo service mongod start
+
+# Kill all process using port 8000
+lsof -i :8000
+kill -9 <pid>
+
+# Run server on port 8000
+node index.js

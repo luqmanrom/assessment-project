@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-lg-8">
+        <h2 style="display: inline"> Shop Directory </h2>
+        <a href="" ng-click="main.modalAddShop()"> <i class="fa fa-plus fa-2x"></i> </a>
+    </div>
+    <div class="col-lg-4">
+        <input type="text" placeholder="Filter" ng-model="main.searchKey" style="display:inline">
+        <button class="btn btn-primary" type="submit" ng-click="studentCtrl.search()"> Search </button>
+    </div>
+</div>
+<div class="row toppad">
+    <div class="col-lg-12">
+        <table class="table">
+            <tr>
+                <th> Shop </th>
+                <th> Floor </th>
+                <th> Unit </th>
+                <th> Index </th>
+                <th> Action </th>
+            </tr>
+            <tr ng-repeat="shop in $root.shops track by $index">
+                <td> {{shop.name}} </td>
+                <td> {{shop.floor}} </td>
+                <td> {{shop.unit}} </td>
+                <td> {{$index}}
+                    <td>
+                        <button class="btn btn-primary" ng-click="main.modalEditShop($index)"> Edit </button>
+                        <button class="btn btn-warning" ng-confirm-click="main.removeShop(shop._id)"> Remove </button>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row toppad bottompad">
+    <div class="col-lg-12">
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-csv="$root.shops" filename="shopDirectory.csv" csv-header="['id','name','floor','unit','v']"> Export </button>
+
+<!--             <button ng-click="main.convert(csv.result)"> Convert</button> -->
+            <button ng-click="main.import(csv.result)" class="btn btn-primary"> Import </button>
+            <ng-csv-import class="import" content="csv.content" header="csv.header" header-visible="csv.headerVisible" separator="csv.separator" separator-visible="csv.separatorVisible" result="csv.result" encoding="csv.encoding" encoding-visible="csv.encodingVisible">
+
+            </ng-csv-import>
+
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="editShopModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Edit Shop</h3>
+    </div>
+    <div class="modal-body">
+        <form ng-submit="edit()">
+            <div class="form-group">
+                <input type="text" name="name" ng-model="editShop.name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="floor" ng-model="editShop.floor" placeholder="Unit" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="unit" ng-model="editShop.unit" placeholder="Unit" required>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit"> Update </button>
+            </div>
+        </form>
+    </div>
+</script>
+<script type="text/ng-template" id="addNewShopModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Add new shop</h3>
+    </div>
+    <div class="modal-body">
+        <form ng-submit="addShop()">
+            <div class="form-group">
+                <label for="name"> Shop name </label>
+                <input type="text" name="name" ng-model="newShop.name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <label for="floor">Floor</label>
+                <input type="text" name="floor" ng-model="newShop.floor" placeholder="Floor" required>
+            </div>
+            <div class="form-group">
+                <label for="unit"> Unit </label>
+                <input type="text" name="unit" ng-model="newShop.unit" placeholder="Unit" required>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit"> Add </button>
+            </div>
+        </form>
+    </div>
+</script>
