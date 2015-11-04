@@ -12,6 +12,7 @@ angular.module('falconCodeChallengeApp')
         var vm = this;
 
         vm.shops = $rootScope.shops;
+
         $scope.csv = {
             content: null,
             header: true,
@@ -20,6 +21,16 @@ angular.module('falconCodeChallengeApp')
             separatorVisible: true,
             result: null,
 
+        };
+
+
+        vm.trim = function(arr) {
+        	arr.forEach(function(el) {
+        		delete el['__v'];
+        		delete el['_id']
+        	})
+
+        	return arr;
         };
 
         vm.import = function(shops) {

@@ -1,11 +1,7 @@
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-12">
         <h2 style="display: inline"> Shop Directory </h2>
         <a href="" ng-click="main.modalAddShop()"> <i class="fa fa-plus fa-2x"></i> </a>
-    </div>
-    <div class="col-lg-4">
-        <input type="text" placeholder="Filter" ng-model="main.searchKey" style="display:inline">
-        <button class="btn btn-primary" type="submit" ng-click="studentCtrl.search()"> Search </button>
     </div>
 </div>
 <div class="row toppad">
@@ -31,17 +27,17 @@
     </div>
 </div>
 <div class="row toppad bottompad">
-    <div class="col-lg-12">
-        <div class="pull-right">
-            <button class="btn btn-primary" ng-csv="$root.shops" filename="shopDirectory.csv" csv-header="['id','name','floor','unit','v']"> Export </button>
-            <div>
-                <ng-csv-import class="import" content="csv.content" header="csv.header" header-visible="csv.headerVisible" separator="csv.separator" separator-visible="csv.separatorVisible" result="csv.result" encoding="csv.encoding" encoding-visible="csv.encodingVisible">
-                </ng-csv-import>
-                <label for="flush"> Flush? </label>
-                <input type="checkbox" name="flush" ng-model="csv.flush" /> <br/>
-                <button ng-click="main.import(csv.result)" class="btn btn-primary"> Import </button>
-
-            </div>
+    <div class="col-lg-6">
+        <button class="btn btn-primary" ng-csv="main.trim($root.shops)" filename="shopDirectory.csv" csv-header="['name','floor','unit']"> Export </button>
+    </div>
+    <div class="col-lg-6">
+        <div>
+            <ng-csv-import class="import" content="csv.content" header="csv.header" header-visible="csv.headerVisible" separator="csv.separator" separator-visible="csv.separatorVisible" result="csv.result" encoding="csv.encoding" encoding-visible="csv.encodingVisible">
+            </ng-csv-import>
+            <label for="flush"> Flush? </label>
+            <input type="checkbox" name="flush" ng-model="csv.flush" />
+            <br/>
+            <button ng-click="main.import(csv.result)" class="btn btn-primary"> Import </button>
         </div>
     </div>
 </div>
