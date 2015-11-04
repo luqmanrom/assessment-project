@@ -99,10 +99,16 @@ router.patch('/shop/:id', function(req, res) {
         delete req.body._id;
     }
 
+    var newShop = {
+        name: req.body.name,
+        floor: req.body.floor,
+        unit: req.body.unit
+    }
+
     db.Shop.findOneAndUpdate({
         '_id': req.params.id
     }, {
-        $set: req.body
+        $set: newShop
     }, function(err, shop) {
         if (err) {
             next(err);
