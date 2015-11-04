@@ -2,12 +2,12 @@ var express = require('express');
 var app = express();
 var router = express.Router();
 var http = require('http').Server(app);
-var mongoose = require('mongoose');
 var cors = require('cors');
 var bodyParser = require('body-parser');
-
-
+var db = require('./mongoose.js');
 var port = process.env.port || 9000;
+
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,19 +17,11 @@ app.use(bodyParser.urlencoded({
 
 app.use('/v1', router);
 
-mongoose.connect('mongodb://localhost/shopDirectoryDB');
 
-var shopSchema = {
-    name: String,
-    floor: String,
-    unit: String
-};
-
-var Shop = mongoose.model('Shop', shopSchema, 'shops'); // Lookup shops collections
 
 router.param('id', function(req, res, next, id) {
     try {
-        mongoose.Types.ObjectId(id); // If this is succesful, the id is valid. If it is not, it will be caught
+        db.checkValidity(id);
         next();
 
     } catch (e) {
@@ -41,7 +33,7 @@ router.param('id', function(req, res, next, id) {
 
 // GET all shops
 router.get('/shops', function(req, res) {
-    Shop.find(function(err, shops) {
+    db.Shop.find(function(err, shops) {
         res.statusCode = 200;
         res.send(shops);
         res.end();
@@ -49,7 +41,7 @@ router.get('/shops', function(req, res) {
 })
 
 router.get('/flush', function(req,res) {
-    Shop.remove({}, function(err,obj) {
+    db.Shop.remove({}, function(err,obj) {
         if (err) {
             // Handle err
         } else {
@@ -64,7 +56,7 @@ router.get('/flush', function(req,res) {
 router.post('/shop', function(req, res) {
     console.log(req.body.name);
 
-    var shop = new Shop({
+    var shop = new db.Shop({
         name: req.body.name,
         floor: req.body.floor,
         unit: req.body.unit
@@ -84,7 +76,7 @@ router.post('/shop', function(req, res) {
 // DELETE shop
 router.delete('/shop/:id', function(req, res) {
     console.log(req.params.id);
-    Shop.remove({
+    db.Shop.remove({
         _id: req.params.id
     }, function(err, body) {
         if (err) {
@@ -106,7 +98,7 @@ router.patch('/shop/:id', function(req, res) {
         delete req.body._id;
     }
 
-    Shop.findOneAndUpdate({
+    db.Shop.findOneAndUpdate({
         '_id': req.params.id
     }, {
         $set: req.body
@@ -132,7 +124,7 @@ router.post('/shop/sync/', function(req, res) {
         unit: req.body.unit
     };
 
-    Shop.findOneAndUpdate({
+    db.Shop.findOneAndUpdate({
         'name': req.body.name
     }, {
         $set: newShop
@@ -143,7 +135,7 @@ router.post('/shop/sync/', function(req, res) {
         } else if (!obj) {
             console.log('Adding new record');
 
-            var shop = new Shop(newShop);
+            var shop = new db.Shop(newShop);
             shop.save(function(err, shop) {
                 if (err) {
                     // Handle error

@@ -1,13 +1,13 @@
 angular.module('falconCodeChallengeApp')
     .factory('FetchDataService', function($http, $rootScope, lodash, $timeout) {
         // return $resource('http://localhost:8000/v1/shops');
-
+        var url = 'http://localhost:9000/v1/'
         var func = {};
 
         var flushServer = function() {
             var promise = $http({
                 method: 'GET',
-                url: 'http://localhost:9000/v1/flush',
+                url: url + 'flush',
             }).then(function successCallback(response) {
                 return response.data;
             });
@@ -31,7 +31,7 @@ angular.module('falconCodeChallengeApp')
         func.getShop = function() {
             var promise = $http({
                 method: 'GET',
-                url: 'http://localhost:9000/v1/shops'
+                url: url + 'shops'
             }).then(function successCallback(response) {
                 return response.data;
             }, function errorCallback(err) {
@@ -46,7 +46,7 @@ angular.module('falconCodeChallengeApp')
         func.editShop = function(shop) {
             var promise = $http({
                 method: 'PATCH',
-                url: 'http://localhost:9000/v1/shop/' + shop._id,
+                url: url + 'shop/' + shop._id,
                 data: shop
             }).then(function successCallback(response) {
                 // Sync with the rootscope
@@ -71,7 +71,7 @@ angular.module('falconCodeChallengeApp')
             console.log(shopId);
             var promise = $http({
                 method: 'DELETE',
-                url: 'http://localhost:9000/v1/shop/' + shopId
+                url: url + 'shop/' + shopId
             }).then(function successCallback(response) {
                 $timeout(function() {
                     lodash.remove($rootScope.shops, function(obj) {
@@ -91,7 +91,7 @@ angular.module('falconCodeChallengeApp')
             console.log(shop);
             var promise = $http({
                 method: 'POST',
-                url: 'http://localhost:9000/v1/shop',
+                url: url + 'shop',
                 data: shop
             }).then(function successCallback(response) {
                 //console.log(response.data)
@@ -116,7 +116,7 @@ angular.module('falconCodeChallengeApp')
                     shops.forEach(function(element) {
                         $http({
                             method: 'POST',
-                            url: 'http://localhost:9000/v1/shop/sync',
+                            url: url + 'shop/sync',
                             data: element
                         }).then(function successCallback(response) {
                         	console.log(response.data);
@@ -132,7 +132,7 @@ angular.module('falconCodeChallengeApp')
                     console.log(element);
                     $http({
                         method: 'POST',
-                        url: 'http://localhost:9000/v1/shop/sync',
+                        url: url + 'shop/sync',
                         data: element
                     }).then(function successCallback(response) {
                     	updateLocalData(response.data)
