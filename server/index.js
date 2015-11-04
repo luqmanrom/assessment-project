@@ -43,7 +43,7 @@ router.get('/shops', function(req, res) {
 router.get('/flush', function(req,res) {
     db.Shop.remove({}, function(err,obj) {
         if (err) {
-            // Handle err
+            next(err);
         } else {
             console.log('FLushed');
             res.statusCode = 200;
@@ -64,7 +64,7 @@ router.post('/shop', function(req, res) {
 
     shop.save(function(err, shop) {
         if (err) {
-            // Handle error
+            next(err);
         } else {
             res.statusCode = 200;
             res.send(shop);
@@ -80,7 +80,7 @@ router.delete('/shop/:id', function(req, res) {
         _id: req.params.id
     }, function(err, body) {
         if (err) {
-            // Handle error
+            next(err);
 
         } else {
             res.statusCode = 200;
@@ -104,8 +104,7 @@ router.patch('/shop/:id', function(req, res) {
         $set: req.body
     }, function(err, shop) {
         if (err) {
-            // Handle Error
-            console.log(err);
+            next(err);
         } else {
             console.log('Patching');
             res.statusCode = 200;
@@ -131,14 +130,14 @@ router.post('/shop/sync/', function(req, res) {
     }, function(err, obj) {
         //console.log(obj);
         if (err) {
-            // Handle err
+            next(err);
         } else if (!obj) {
             console.log('Adding new record');
 
             var shop = new db.Shop(newShop);
             shop.save(function(err, shop) {
                 if (err) {
-                    // Handle error
+                    next(err);
                 } else {
                     res.statusCode = 200;
                     res.send(shop);
@@ -149,8 +148,6 @@ router.post('/shop/sync/', function(req, res) {
 
 
     })
-
-
 })
 
 
